@@ -1,13 +1,13 @@
 
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QFileDialog
-
+from Core.scanner import scan_folder
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Smart File Manager")
-        self.resize(1000, 650)
+        self.setWindowTitle("BEAF")
+        self.resize(1000, 500)
 
         self.setup_ui()
 
@@ -15,25 +15,20 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         layout = QVBoxLayout()
 
-        self.folder_label = QLabel("No folder selected")
-        self.browse_button = QPushButton("Browse Folder")
+        self.folderlabel = QLabel("No folder selected")
+        self.searchfolderbutton = QPushButton("Open folder")
 
-        layout.addWidget(self.folder_label)
-        layout.addWidget(self.browse_button)
+        layout.addWidget(self.folderlabel)
+        layout.addWidget(self.searchfolderbutton)
         layout.addStretch()
 
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
-        self.browse_button.clicked.connect(self.select_folder)
+        self.searchfolderbutton.clicked.connect(self.select_folder)
 
     def select_folder(self):
-        folder_path = QFileDialog.getExistingDirectory(
-            self,
-            "Select a Folder",
-            ""
-        )
-
+        folder_path = QFileDialog.getExistingDirectory(self, "select a folder", "")
         if folder_path:
-            self.folder_label.setText(folder_path)
-            print(f"Selected folder: {folder_path}")
+            self.folderlabel.setText(folder_path)
+            scan_folder(folder_path)
